@@ -3,3 +3,6 @@
 */target
 */Cargo.lock
 .vscode
+.venv
+target
+Cargo.lock
