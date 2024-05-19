@@ -1,14 +1,16 @@
-use crate::sim_builder::build_object::build_object;
-use crate::sim_builder::parse_json::parse_json;
+use super::build_object::build_object;
+use super::parse_json;
 use pyo3::prelude::*;
 use pyo3::types::*;
+use std::collections::VecDeque;
 
-use super::parse_json;
 
-pub fn build_sim (configs: &parse_json::Config, objects: &Vec<parse_json::Object>) -> SimEngine {
+pub fn build_sim (configs: &parse_json::Config, objects: &VecDeque<parse_json::Object>) -> SimEngine {
 	for object in objects.iter() {
-		build_object();
+		build_object(&object);
 	}
+
+	SimEngine::default()
 }
 
 pub fn build_engine (config: &parse_json::Config) -> () {
@@ -26,7 +28,7 @@ impl SimEngine {
 	}
 }
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 pub struct SimState {
 
 }

@@ -1,26 +1,27 @@
 use serde_json;
-use std::fs;
+use std::collections::VecDeque;
 
 #[derive(Default, Copy, Clone)]
 pub struct Config {
-	gravity_multiplier: f64,
-	env_size: f64,
+	pub gravity_multiplier: f64,
+	pub env_size: f64,
+	pub max_past_states: usize,
 }
 
 #[derive(Default, Clone)]
 pub struct Object {
-	coords: Vec<f64>,
-	orientation: Vec<f64>,
-	object_type: String,
-	parameters: std::collections::HashMap<String, f64>,
+	pub coords: Vec<f64>,
+	pub orientation: Vec<f64>,
+	pub object_type: String,
+	pub parameters: std::collections::HashMap<String, f64>,
 }
 
 pub fn parse_json (json_str: String)
-	-> (Config, Vec<Object>) {
+	-> (Config, VecDeque<Object>) {
 	let json: serde_json::Value = serde_json::from_str(&json_str).unwrap();
 
 	let mut config: Config = Config::default();
-	let mut objects: Vec<Object> = Vec::new();
+	let mut objects: VecDeque<Object> = VecDeque::new();
 
 	let object_configs = json.get("objects").unwrap();
 	for (_k, v) in object_configs.as_object().unwrap() {
@@ -54,7 +55,7 @@ pub fn parse_json (json_str: String)
 			object.parameters.insert(param_k, param_v.as_f64().unwrap());
 		}
 
-		objects.push(object);
+		objects.push_back(object);
 	}
 	
 	(config, objects)

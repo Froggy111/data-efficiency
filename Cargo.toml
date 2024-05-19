@@ -1,4 +1,4 @@
 cargo-features = ["edition2024"]
 
 [workspace]
-members = ["src/sim-rs"]
+members = ["src/sim"]
